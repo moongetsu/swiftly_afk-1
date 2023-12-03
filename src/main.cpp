@@ -26,8 +26,17 @@ void OnProgramLoad(const char *pluginName, const char *mainFilePath)
     timers = new Timers();
 }
 
+void Command_AFK(Player *player)
+{
+    int team = player->team->Get();
+
+    player->team->Set(TEAM_SPECTATOR);
+    player->SendMsg(HUD_PRINTTALK, "{RED}[1TAP]{DEFAULT}You have gone {RED}AFK.");
+}
+
 void OnPluginStart()
 {
+    commands->Register("afk", reinterpret_cast<void *>(&Command_AFK));
 }
 
 void OnPluginStop()
