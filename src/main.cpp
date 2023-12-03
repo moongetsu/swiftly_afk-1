@@ -32,7 +32,7 @@ void Command_AFK(Player *player)
 
     player->team->Set(TEAM_SPECTATOR);
     player->SendMsg(HUD_PRINTTALK, "{RED}[1TAP]{DEFAULT}You have gone {RED}AFK.");
-} //
+} ///
 
 void OnPluginStart()
 {
