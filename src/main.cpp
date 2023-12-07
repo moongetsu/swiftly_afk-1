@@ -1,18 +1,10 @@
 #include <swiftly/swiftly.h>
 #include <swiftly/server.h>
-#include <swiftly/database.h>
 #include <swiftly/commands.h>
-#include <swiftly/configuration.h>
-#include <swiftly/logger.h>
-#include <swiftly/timers.h>
 
 Server *server = nullptr;
 PlayerManager *g_playerManager = nullptr;
-Database *db = nullptr;
 Commands *commands = nullptr;
-Configuration *config = nullptr;
-Logger *logger = nullptr;
-Timers *timers = nullptr;
 
 void OnProgramLoad(const char *pluginName, const char *mainFilePath)
 {
@@ -21,18 +13,17 @@ void OnProgramLoad(const char *pluginName, const char *mainFilePath)
     server = new Server();
     g_playerManager = new PlayerManager();
     commands = new Commands(pluginName);
-    config = new Configuration();
-    logger = new Logger(mainFilePath, pluginName);
-    timers = new Timers();
 }
 
-void Command_AFK(Player *player)
+void Command_AFK(int playerID, const char **args, uint32_t argsCount, bool silent)
 {
+    Player *player = g_playerManager->GetPlayer(playerID);
+    if (!player)
+        return;
     int team = player->team->Get();
-
     player->team->Set(TEAM_SPECTATOR);
-    player->SendMsg(HUD_PRINTTALK, "{RED}[1TAP]{DEFAULT}You have gone {RED}AFK.");
-} ///
+    player->SendMsg(HUD_PRINTTALK, "{red}[1TAP] {default}You have gone {red}AFK.");
+} // "Parca acum arata mai ok 🤓 - Skuzzi (04.12.2023, 21:28)"
 
 void OnPluginStart()
 {
@@ -41,11 +32,12 @@ void OnPluginStart()
 
 void OnPluginStop()
 {
+
 }
 
 const char *GetPluginAuthor()
 {
-    return "";
+    return "blu, moongetsu";
 }
 
 const char *GetPluginVersion()
@@ -55,7 +47,7 @@ const char *GetPluginVersion()
 
 const char *GetPluginName()
 {
-    return "swiftly_afk";
+    return "AFK Plugin";
 }
 
 const char *GetPluginWebsite()
